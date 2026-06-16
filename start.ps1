@@ -13,13 +13,18 @@ if ($Remote) {
 } else {
     Write-Host "  Mode    " -NoNewline; Write-Host " LOCAL" -ForegroundColor Cyan
     Write-Host "  App     " -NoNewline -ForegroundColor Green;      Write-Host " -> http://localhost:50080"
-    Write-Host "  API     " -NoNewline -ForegroundColor Blue;       Write-Host " -> http://localhost:53000"
+    Write-Host "  API     " -NoNewline -ForegroundColor Blue;       Write-Host " -> http://localhost:54000"
     Write-Host "  Nginx   " -NoNewline -ForegroundColor DarkYellow; Write-Host " -> http://localhost:50080"
 }
 
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 
+Write-Host "Removing existing containers..." -ForegroundColor Yellow
+docker compose down
+docker rm -f aiw-frontend aiw-backend aiw-nginx 2>$null
+
+Write-Host ""
 if ($Remote) {
     docker compose -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.remote.yml up --scale backend=0
 } else {
